@@ -1,7 +1,7 @@
-import  PrismaSingleton  from './../prisma'
+import PrismaSingleton from './../prisma'
 import { Router, Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
-import {isEmpty} from 'lodash'
+import { isEmpty } from 'lodash'
 
 const prisma = PrismaSingleton.getInstance()
 const api = Router()
@@ -10,23 +10,23 @@ const api = Router()
 // USER CRUD
 
 api.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params 
+  const { id } = req.params
   try {
-    id 
+    id
     const user = await prisma.user.findUnique({
       where: {
-        id : parseInt(id)
+        id: parseInt(id)
       },
     })
 
     if (user) {
-      res.status(200).json({user})
+      res.status(200).json({ user })
     }
     else {
       res.status(400).json({ 'err': 'user inexistant' })
     }
   } catch (err) {
-    res.status(400).json({err})
+    res.status(400).json({ err })
   }
 })
 
@@ -45,7 +45,7 @@ api.put('/:id/', async (req: Request, res: Response) => {
     const { firstname, lastname } = req.body
     const user = await prisma.user.findUnique({
       where: {
-        id : parseInt(id)
+        id: parseInt(id)
       },
     })
 
@@ -64,14 +64,14 @@ api.put('/:id/', async (req: Request, res: Response) => {
         data
       })
 
-      res.status(200).json({updatedUser})
+      res.status(200).json({ updatedUser })
     }
     else {
       res.status(404).json({ 'err': 'user inexistant' })
     }
 
   } catch (err) {
-    res.status(404).json({err})
+    res.status(404).json({ err })
   }
 })
 
@@ -80,31 +80,53 @@ api.delete('/:id', async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id : parseInt(id)
+        id: parseInt(id)
       },
     })
 
     if (user) {
       await prisma.user.delete({
         where: {
-          id : parseInt(id)
+          id: parseInt(id)
         },
       })
 
-      res.status(200).json({user})
+      res.status(200).json({ user })
     }
     else {
       res.status(404).json({ 'err': 'user inexistant' })
     }
   } catch (err) {
-    res.status(404).json({err})
+    res.status(404).json({ err })
   }
 })
 
 
 //User task CRUD 
 
-api.post('/:id/tasks', async (req,res) =>{
+api.get('/:id/tasks', async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where:
+      {
+        id: parseInt(req.params.id)
+      },
+      include: { tasks: true }
+    })
+    if (user) {
+      res.status(200).json({ tasks : user.tasks }) 
+    }
+    else {
+      res.status(404).json({ err: 'User non trouvé' })
+    }
+  }
+  catch (err) {
+    res.status(404).json({ err })
+  }
+
+})
+
+api.post('/:id/tasks', async (req, res) => {
   const fields = ['content']
   try {
     const { id } = req.params
@@ -113,86 +135,86 @@ api.post('/:id/tasks', async (req,res) =>{
       const isPlural = missings.length > 1
       throw new Error(`Field${isPlural ? 's' : ''} [ ${missings.join(', ')} ] ${isPlural ? 'are' : 'is'} missing`)
     }
-    const {  content } = req.body
-    const user = await prisma.user.findUnique({where: {id:parseInt(id)}})
+    const { content } = req.body
+    const user = await prisma.user.findUnique({ where: { id: parseInt(id) } })
 
-    if(user){
-     const data ={isComplete:false,content,userId:user.id}
+    if (user) {
+      const data = { isComplete: false, content, userId: user.id }
       const task = prisma.task.create({
         data
       })
-      res.status(200).json({task})
+      res.status(200).json({ task })
     }
-    else{
-      res.status(404).json({err:'User non trouvé'})
+    else {
+      res.status(404).json({ err: 'User non trouvé' })
     }
   }
   catch (err) {
-    res.status(404).json({err})
+    res.status(404).json({ err })
   }
 
 })
 
 
-api.put('/:id/tasks/:taskId', async (req,res) =>{
-  const {id,taskId} = req.params
+api.put('/:id/tasks/:taskId', async (req, res) => {
+  const { id, taskId } = req.params
   try {
-    const user = await prisma.user.findUnique({where: {id:parseInt(id)}})
-    if(user){
-      const task = await prisma.task.findUnique({where: {id:parseInt(taskId)}})
-      if(task){
-        let data={}
-        if (req.body.content){
+    const user = await prisma.user.findUnique({ where: { id: parseInt(id) } })
+    if (user) {
+      const task = await prisma.task.findUnique({ where: { id: parseInt(taskId) } })
+      if (task) {
+        let data = {}
+        if (req.body.content) {
           data['content'] = req.body.content
         }
-        if(req.body.isComplete){
+        if (req.body.isComplete) {
           data["isComplete"] = req.body.isComplete
         }
         const taskUpdated = prisma.task.update({
-          where : {id :parseInt(taskId) },
+          where: { id: parseInt(taskId) },
           data
         })
-        res.status(200).json({taskUpdated})
+        res.status(200).json({ taskUpdated })
       }
-      else{
-        res.status(400).json({err:"tache inexistante"})
+      else {
+        res.status(400).json({ err: "tache inexistante" })
       }
 
     }
-    else{
-      res.status(404).json({err:'User non trouvé'})
+    else {
+      res.status(404).json({ err: 'User non trouvé' })
     }
   }
   catch (err) {
-    res.status(404).json({err})
+    res.status(404).json({ err })
   }
 
 })
 
 
-api.delete('/:id/tasks/:taskId', async (req,res) =>{
-  const {id,taskId} = req.params
+api.delete('/:id/tasks/:taskId', async (req, res) => {
+  const { id, taskId } = req.params
   try {
-    const user = await prisma.user.findUnique({where: {id:parseInt(id)}})
-    if(user){
-      const task = await prisma.task.findUnique({where: {id:parseInt(taskId)}})
-      if(task){
+    const user = await prisma.user.findUnique({ where: { id: parseInt(id) } })
+    if (user) {
+      const task = await prisma.task.findUnique({ where: { id: parseInt(taskId) } })
+      if (task) {
         const deleted = prisma.task.delete({
-          where : {id :parseInt(taskId) }
+          where: { id: parseInt(taskId) }
         })
-        res.status(200).json({deleted})
+        res.status(200).json({ deleted })
       }
-      else{
-        res.status(400).json({err:"tache inexistante"})
+      else {
+        res.status(400).json({ err: "tache inexistante" })
       }
 
     }
-    else{
-      res.status(404).json({err:'User non trouvé'})
+    else {
+      res.status(404).json({ err: 'User non trouvé' })
     }
   }
   catch (err) {
-    res.status(404).json({err})
+    res.status(404).json({ err })
   }
 
 })
