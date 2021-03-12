@@ -2,9 +2,10 @@ import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import dotenv from 'dotenv'
-import prisma from './../prisma'
 import bcrypt from 'bcryptjs'
+import PrismaSingleton from './../prisma'
 
+const prisma = PrismaSingleton.getInstance()
 dotenv.config()
 
 /**

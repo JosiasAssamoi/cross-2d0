@@ -3,5 +3,6 @@
 
 # Initialisation DB || DB initialization
 **npx prisma migrate reset --preview-feature OU yarn prisma migrate reset --preview-feature**
-<br>npx prisma migrate dev --preview-feature OU yarn prisma migrate dev --preview-feature</br>
-yarn install and yarn dev 
+**<br>npx prisma migrate dev --preview-feature OU yarn prisma migrate dev --preview-feature</br>**
+**yarn install<br/>**
+**yarn dev**

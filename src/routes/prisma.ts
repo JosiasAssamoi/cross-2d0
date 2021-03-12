@@ -1,5 +1,18 @@
-import { PrismaClient } from '@prisma/client';
- 
-const prisma = new PrismaClient();
+import { PrismaClient } from '@prisma/client'
 
-export default prisma;
+class PrismaSingleton  {
+  public prisma: PrismaClient
+  private static instance: PrismaSingleton
+  private constructor() {
+    this.prisma = new PrismaClient()
+  }
+
+  public static getInstance(): PrismaClient {
+    if (!PrismaSingleton.instance) {
+        PrismaSingleton.instance = new PrismaSingleton()
+    }
+    return PrismaSingleton.instance.prisma
+  }
+}
+
+export default PrismaSingleton

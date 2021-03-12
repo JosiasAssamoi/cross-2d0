@@ -1,6 +1,8 @@
-import  prisma  from './../prisma'
+import  PrismaSingleton  from './../prisma'
 import { Router, Request, Response } from 'express'
 
+
+const prisma = PrismaSingleton.getInstance()
 const api = Router()
 
 
