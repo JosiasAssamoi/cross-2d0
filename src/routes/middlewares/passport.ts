@@ -11,8 +11,7 @@ dotenv.config()
 /**
  * Local strategy
  */
-function checkPassword(uncryptedPassword: string, password:string): boolean {
-    
+function checkPassword(uncryptedPassword: string, password:string): boolean {  
   return bcrypt.compareSync(uncryptedPassword, password)
 }
  

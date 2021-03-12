@@ -13,7 +13,9 @@ api.get("/",(_,res) =>{
 })
 
 api.use('/signup',signup)
+// init passport 
 api.use(passport.initialize())
+// ajoutes les routes securisées
 api.use('/', passport.authenticate('jwt', { session: false }), secured)
 
 

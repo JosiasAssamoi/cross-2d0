@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from "dotenv"
 import api from './routes'
+import PrismaSingleton from './routes/prisma'
 
 const main = () => {
   if (process.env.DATABASE_URL && process.env.JWT_ENCRYPTION) {
@@ -11,7 +12,7 @@ const main = () => {
 
     app.use('/api', api)
 
-    
+
 
     app.listen(3000, () =>
       console.log(
