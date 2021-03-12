@@ -3,3 +3,4 @@ dist/
 .env
 /migrations
 migrations/
+yarn-error.log
