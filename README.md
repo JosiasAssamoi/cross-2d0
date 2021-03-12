@@ -2,7 +2,7 @@
 **Backend in node and typescript** 
 
 # Initialisation DB || DB initialization
-**npx prisma migrate reset --preview-feature OU yarn prisma migrate reset --preview-feature**
-**<br>npx prisma migrate dev --preview-feature OU yarn prisma migrate dev --preview-feature</br>**
-**yarn install<br/>**
-**yarn dev**
+**npx prisma migrate reset --preview-feature OU yarn prisma migrate reset --preview-feature** <br/>
+npx prisma migrate dev --preview-feature OU yarn prisma migrate dev --preview-feature<br/>
+yarn install<br/>
+yarn dev 

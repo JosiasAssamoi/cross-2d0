@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs'
 import PrismaSingleton from './prisma'
 
 const prisma = PrismaSingleton.getInstance()
-prisma.$connect()
 
 
 const api = Router()
