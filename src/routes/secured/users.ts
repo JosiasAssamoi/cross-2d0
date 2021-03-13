@@ -2,6 +2,7 @@ import PrismaSingleton from './../prisma'
 import { Router, Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import { isEmpty } from 'lodash'
+import error from '../../utils/error'
 
 const prisma = PrismaSingleton.getInstance()
 const api = Router()
@@ -26,7 +27,7 @@ api.get('/:id', async (req: Request, res: Response) => {
       res.status(400).json({ 'err': 'user inexistant' })
     }
   } catch (err) {
-    res.status(400).json({ err })
+    res.status(400).json(error(err))
   }
 })
 
@@ -71,7 +72,7 @@ api.put('/:id/', async (req: Request, res: Response) => {
     }
 
   } catch (err) {
-    res.status(404).json({ err })
+    res.status(404).json(error(err))
   }
 })
 
@@ -97,7 +98,7 @@ api.delete('/:id', async (req: Request, res: Response) => {
       res.status(404).json({ 'err': 'user inexistant' })
     }
   } catch (err) {
-    res.status(404).json({ err })
+    res.status(404).json(error(err))
   }
 })
 
@@ -114,14 +115,14 @@ api.get('/:id/tasks', async (req, res) => {
       include: { tasks: true }
     })
     if (user) {
-      res.status(200).json({ tasks : user.tasks }) 
+      res.status(200).json({ tasks: user.tasks })
     }
     else {
       res.status(404).json({ err: 'User non trouvé' })
     }
   }
   catch (err) {
-    res.status(404).json({ err })
+    res.status(404).json(error(err))
   }
 
 })
@@ -150,7 +151,7 @@ api.post('/:id/tasks', async (req, res) => {
     }
   }
   catch (err) {
-    res.status(404).json({ err })
+    res.status(404).json(error(err))
   }
 
 })
@@ -186,7 +187,7 @@ api.put('/:id/tasks/:taskId', async (req, res) => {
     }
   }
   catch (err) {
-    res.status(404).json({ err })
+    res.status(404).json(error(err))
   }
 
 })
@@ -214,7 +215,7 @@ api.delete('/:id/tasks/:taskId', async (req, res) => {
     }
   }
   catch (err) {
-    res.status(404).json({ err })
+    res.status(404).json(error(err))
   }
 
 })
